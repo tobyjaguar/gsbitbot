@@ -1,0 +1,17 @@
+{
+  "name": "gsbitbot",
+  "version": "1.0.0",
+  "description": "Telegram bitbot for crypto prices",
+  "main": "index.js",
+  "repository": "https://github.com/tobyjaguar/gsbitbot.git",
+  "author": "tobyjaguar <talgya@gmail.com>",
+  "license": "none",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "config": "^3.3.1",
+    "moment": "^2.27.0",
+    "mongoose": "^5.9.28",
+    "node-telegram-bot-api": "^0.50.0",
+    "winston": "^3.3.3"
+  }
+}
