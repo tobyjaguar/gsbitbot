@@ -25,7 +25,9 @@ module.exports = function() {
     //console.log(`hello ${msg.from.first_name}`);
     //console.log(`you wrote ${msg.text}`);
 
-    switch((msg.text).toLowerCase()) {
+    let request = (msg.text) ? msg.text.trim().toLowerCase() : '';
+    
+    switch(request) {
       case '/help':
         bot.sendMessage(chatId, `
           This is a bot to give you prices when you ask for them. Try /pairs for a list of pairs, or /commands for a list of commands.
