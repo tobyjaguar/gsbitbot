@@ -1,20 +1,19 @@
+const config = require('config');
+const moment = require('moment');
+const { logger } = require('../services/logging');
+const { PriceDetail } = require('../models/prices');
+const { resetBot } = require('../services/bot');
+const { convertToEUR,
+  convertToCAD,
+  convertToCNY,
+  convertToJPY,
+  gsr, ber } = require('../utils/conversions');
+
+let bot;
+
 module.exports = function() {
-  const config = require('config');
-  const moment = require('moment');
-  const { logger } = require('../services/logging');
-  const { PriceDetail } = require('../models/prices');
-  const TelegramBot = require('node-telegram-bot-api');
-  const { convertToEUR,
-          convertToCAD,
-          convertToCNY,
-          convertToJPY,
-          gsr, ber } = require('../utils/conversions');
 
-  // replace the value below with the Telegram token you receive from @BotFather
-  const token = config.get('apiToken');
-
-  // Create a bot that uses 'polling' to fetch new updates
-  const bot = new TelegramBot(token, {polling: true});
+  bot = resetBot();
 
   // Listen for any kind of message. There are different kinds of
   // messages.
@@ -26,7 +25,7 @@ module.exports = function() {
     //console.log(`you wrote ${msg.text}`);
 
     let request = (msg.text) ? msg.text.trim().toLowerCase() : '';
-    
+
     switch(request) {
       case '/help':
         bot.sendMessage(chatId, `
@@ -179,7 +178,16 @@ module.exports = function() {
     // send a message to the chat acknowledging receipt of their message
     //bot.sendMessage(chatId, 'Received your message');
 
-  });
+  }); // end bot message
+
+  bot.on('polling_error', (error) => {
+    console.log(`polling_error: ${error}`);
+    console.log(`checking error: ${error.code}...`);
+    if (error.code === 'EFATAL') {
+      console.log('try resetting the bot...');
+      bot = resetBot();
+    }
+  }); //end bot error
 }
 
 
