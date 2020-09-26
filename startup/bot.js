@@ -2,7 +2,7 @@ const config = require('config');
 const moment = require('moment');
 const { logger } = require('../services/logging');
 const { PriceDetail } = require('../models/prices');
-const { resetBot } = require('../services/bot');
+const { getBot, setBot } = require('../services/bot');
 const { convertToEUR,
   convertToCAD,
   convertToCNY,
@@ -13,7 +13,7 @@ let bot;
 
 module.exports = function() {
 
-  bot = resetBot();
+  bot = setBot();
 
   // Listen for any kind of message. There are different kinds of
   // messages.
@@ -30,12 +30,20 @@ module.exports = function() {
       case '/help':
         bot.sendMessage(chatId, `
           This is a bot to give you prices when you ask for them. Try /pairs for a list of pairs, or /commands for a list of commands.
-        `);
+        `)
+        .catch((error) => {
+          logger.error(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, code: ${error.code}, error: ${error.response.body} date: ${moment.unix(msg.date)}`);
+        });
+        logger.info(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, text: ${msg.text}, date: ${moment.unix(msg.date)}`);
         break;
       case '/commands':
         bot.sendMessage(chatId, `
           You can try the following:\n/prices\n/crypto\n/rates\n/metal\n/pricesInEUR\n/pricesInCAD\n/pricesInCNY\n/pricesInJPY
-        `);
+        `)
+        .catch((error) => {
+          logger.error(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, code: ${error.code}, error: ${error.response.body} date: ${moment.unix(msg.date)}`);
+        });
+        logger.info(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, text: ${msg.text}, date: ${moment.unix(msg.date)}`);
         break;
       case '/prices':
         try {
@@ -43,7 +51,11 @@ module.exports = function() {
           let result = `
             BTC: $${data.btc}\nETH: $${data.eth}\nBER: ${ber(data.btc, data.eth)}\n\nGOLD/oz: $${data.xau}\nSILVER/oz: $${data.xag}\nGSR: ${gsr(data.xau, data.xag)}\n\nCAD: $${data.cad}\nEUR: $${data.eur}\nCNY: $${data.cny}\nJPY: $${data.jpy}
             `
-          bot.sendMessage(chatId, result);
+          bot.sendMessage(chatId, result)
+          .catch((error) => {
+            logger.error(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, code: ${error.code}, error: ${error.response.body} date: ${moment.unix(msg.date)}`);
+          });
+
           logger.info(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, text: ${msg.text}, date: ${moment.unix(msg.date)}`);
         }
         catch(ex) {
@@ -56,7 +68,11 @@ module.exports = function() {
           let result = `
             BTC: $${data.btc}\nETH: $${data.eth}\nBER: ${ber(data.btc, data.eth)}\n
             `
-          bot.sendMessage(chatId, result);
+          bot.sendMessage(chatId, result)
+          .catch((error) => {
+            logger.error(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, code: ${error.code}, error: ${error.response.body} date: ${moment.unix(msg.date)}`);
+          });
+
           logger.info(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, text: ${msg.text}, date: ${moment.unix(msg.date)}`);
         }
         catch(ex) {
@@ -67,7 +83,11 @@ module.exports = function() {
         try {
           let data = await PriceDetail.findOne().sort({ field: 'asc', timestamp: -1 });
           let result = `BTC: $${data.btc}`
-          bot.sendMessage(chatId, result);
+          bot.sendMessage(chatId, result)
+          .catch((error) => {
+            logger.error(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, code: ${error.code}, error: ${error.response.body} date: ${moment.unix(msg.date)}`);
+          });
+
           logger.info(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, text: ${msg.text}, date: ${moment.unix(msg.date)}`);
         }
         catch(ex) {
@@ -78,7 +98,11 @@ module.exports = function() {
         try {
           let data = await PriceDetail.findOne().sort({ field: 'asc', timestamp: -1 });
           let result = `ETH: $${data.eth}`
-          bot.sendMessage(chatId, result);
+          bot.sendMessage(chatId, result)
+          .catch((error) => {
+            logger.error(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, code: ${error.code}, error: ${error.response.body} date: ${moment.unix(msg.date)}`);
+          });
+
           logger.info(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, text: ${msg.text}, date: ${moment.unix(msg.date)}`);
         }
         catch(ex) {
@@ -91,7 +115,11 @@ module.exports = function() {
           let result = `
             CAD: $${data.cad}\nEUR: $${data.eur}\nCNY: $${data.cny}\nJPY: $${data.jpy}
             `
-          bot.sendMessage(chatId, result);
+          bot.sendMessage(chatId, result)
+          .catch((error) => {
+            logger.error(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, code: ${error.code}, error: ${error.response.body} date: ${moment.unix(msg.date)}`);
+          });
+
           logger.info(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, text: ${msg.text}, date: ${moment.unix(msg.date)}`);
         }
         catch(ex) {
@@ -104,7 +132,11 @@ module.exports = function() {
           let result = `
             GOLD/oz: $${data.xau}\nSILVER/oz: $${data.xag}\nGSR: ${gsr(data.xau, data.xag)}\n
             `
-          bot.sendMessage(chatId, result);
+          bot.sendMessage(chatId, result)
+          .catch((error) => {
+            logger.error(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, code: ${error.code}, error: ${error.response.body} date: ${moment.unix(msg.date)}`);
+          });
+
           logger.info(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, text: ${msg.text}, date: ${moment.unix(msg.date)}`);
         }
         catch(ex) {
@@ -119,7 +151,11 @@ module.exports = function() {
           let result = `
             BTC: €${data.btc}\nETH: €${data.eth}\nBER: ${ber(data.btc, data.eth)}\n\nGOLD/oz: €${data.xau}\nSILVER/oz: €${data.xag}\nGSR: ${gsr(data.xau, data.xag)}\n\nCAD: €${data.cad}\nEUR: €${data.eur}\nCNY: €${data.cny}\nJPY: €${data.jpy}
             `
-          bot.sendMessage(chatId, result);
+          bot.sendMessage(chatId, result)
+          .catch((error) => {
+            logger.error(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, code: ${error.code}, error: ${error.response.body} date: ${moment.unix(msg.date)}`);
+          });
+
           logger.info(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, text: ${msg.text}, date: ${moment.unix(msg.date)}`);
           }
           catch(ex) {
@@ -134,7 +170,11 @@ module.exports = function() {
           let result = `
             BTC: $${data.btc}\nETH: $${data.eth}\nBER: ${ber(data.btc, data.eth)}\n\nGOLD/oz: $${data.xau}\nSILVER/oz: $${data.xag}\nGSR: ${gsr(data.xau, data.xag)}\n\nCAD: $${data.cad}\nEUR: $${data.eur}\nCNY: $${data.cny}\nJPY: $${data.jpy}
             `
-          bot.sendMessage(chatId, result);
+          bot.sendMessage(chatId, result)
+          .catch((error) => {
+            logger.error(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, code: ${error.code}, error: ${error.response.body} date: ${moment.unix(msg.date)}`);
+          });
+
           logger.info(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, text: ${msg.text}, date: ${moment.unix(msg.date)}`);
           }
           catch(ex) {
@@ -149,7 +189,11 @@ module.exports = function() {
           let result = `
             BTC: ¥${data.btc}\nETH: ¥${data.eth}\nBER: ${ber(data.btc, data.eth)}\n\nGOLD/oz: ¥${data.xau}\nSILVER/oz: ¥${data.xag}\nGSR: ${gsr(data.xau, data.xag)}\n\nCAD: ¥${data.cad}\nEUR: ¥${data.eur}\nCNY: ¥${data.cny}\nJPY: ¥${data.jpy}
             `
-          bot.sendMessage(chatId, result);
+          bot.sendMessage(chatId, result)
+          .catch((error) => {
+            logger.error(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, code: ${error.code}, error: ${error.response.body} date: ${moment.unix(msg.date)}`);
+          });
+
           logger.info(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, text: ${msg.text}, date: ${moment.unix(msg.date)}`);
           }
           catch(ex) {
@@ -164,7 +208,11 @@ module.exports = function() {
           let result = `
             BTC: ¥${data.btc}\nETH: ¥${data.eth}\nBER: ${ber(data.btc, data.eth)}\n\nGOLD/oz: ¥${data.xau}\nSILVER/oz: ¥${data.xag}\nGSR: ${gsr(data.xau, data.xag)}\n\nCAD: ¥${data.cad}\nEUR: ¥${data.eur}\nCNY: ¥${data.cny}\nJPY: ¥${data.jpy}
             `
-          bot.sendMessage(chatId, result);
+          bot.sendMessage(chatId, result)
+          .catch((error) => {
+            logger.error(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, code: ${error.code}, error: ${error.response.body} date: ${moment.unix(msg.date)}`);
+          });
+
           logger.info(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, text: ${msg.text}, date: ${moment.unix(msg.date)}`);
           }
           catch(ex) {
@@ -172,7 +220,10 @@ module.exports = function() {
           }
         break;
       default:
-        bot.sendMessage(chatId, `Oops, I didn't get that. Try Again`);
+        bot.sendMessage(chatId, `Oops, I didn't get that. Try Again`)
+        .catch((error) => {
+          logger.error(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, code: ${error.code}, error: ${error.response.body} date: ${moment.unix(msg.date)}`);
+        });
     }
 
     // send a message to the chat acknowledging receipt of their message
@@ -180,14 +231,18 @@ module.exports = function() {
 
   }); // end bot message
 
-  bot.on('polling_error', (error) => {
-    console.log(`polling_error: ${error}`);
-    console.log(`checking error: ${error.code}...`);
+  bot.on('polling_error', async (error) => {
+    logger.error(`polling error: ${error}, code: ${error.code}, date: ${moment.unix(msg.date)}`);
     if (error.code === 'EFATAL') {
-      console.log('try resetting the bot...');
-      bot = resetBot();
+      console.log('we are fatal...');
+      await bot.stopPolling();
+      bot.startPolling();
     }
-  }); //end bot error
+  }); //end polling error
+
+  bot.on('webhook_error', (error) => {
+    logger.error(`webhook error: ${error}, code: ${error.code}, date: ${moment.unix(msg.date)}`);
+});
 }
 
 
