@@ -38,7 +38,7 @@ module.exports = function() {
         break;
       case '/commands':
         bot.sendMessage(chatId, `
-          You can try the following:\n/prices\n/crypto\n/rates\n/metal\n/pricesInEUR\n/pricesInCAD\n/pricesInCNY\n/pricesInJPY
+          You can try the following:\n/prices\n/crypto\n/rates\n/metal\n/pricesInEUR\n/pricesInCAD\n/pricesInCNY\n/pricesInJPY\ncontact\ndonate
         `)
         .catch((error) => {
           logger.error(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, code: ${error.code}, error: ${error.response.body} date: ${moment.unix(msg.date)}`);
@@ -208,6 +208,34 @@ module.exports = function() {
           let result = `
             BTC: ¥${data.btc}\nETH: ¥${data.eth}\nBER: ${ber(data.btc, data.eth)}\n\nGOLD/oz: ¥${data.xau}\nSILVER/oz: ¥${data.xag}\nGSR: ${gsr(data.xau, data.xag)}\n\nCAD: ¥${data.cad}\nEUR: ¥${data.eur}\nCNY: ¥${data.cny}\nJPY: ¥${data.jpy}
             `
+          bot.sendMessage(chatId, result)
+          .catch((error) => {
+            logger.error(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, code: ${error.code}, error: ${error.response.body} date: ${moment.unix(msg.date)}`);
+          });
+
+          logger.info(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, text: ${msg.text}, date: ${moment.unix(msg.date)}`);
+          }
+          catch(ex) {
+            logger.error(ex);
+          }
+        break;
+      case '/donate':
+        try {
+          let result = `If you would like to donate to server costs and to keeping me online,\nplease forward your generosity to\nBTC: 31o28qQFqKFbgRwGewTaBzzFuYjKt62Rxz\nETH: 0x5392aa447103d8e83A1Ca268a217911B7BD50841`
+          bot.sendMessage(chatId, result)
+          .catch((error) => {
+            logger.error(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, code: ${error.code}, error: ${error.response.body} date: ${moment.unix(msg.date)}`);
+          });
+
+          logger.info(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, text: ${msg.text}, date: ${moment.unix(msg.date)}`);
+          }
+          catch(ex) {
+            logger.error(ex);
+          }
+        break;
+      case '/contact':
+        try {
+          let result = `for contact email gsbitbot at protonmail dot com`
           bot.sendMessage(chatId, result)
           .catch((error) => {
             logger.error(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, code: ${error.code}, error: ${error.response.body} date: ${moment.unix(msg.date)}`);
