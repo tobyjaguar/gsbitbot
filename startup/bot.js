@@ -38,7 +38,7 @@ module.exports = function() {
         break;
       case '/commands':
         bot.sendMessage(chatId, `
-          You can try the following:\n/prices\n/crypto\n/rates\n/metal\n/pricesInEUR\n/pricesInCAD\n/pricesInCNY\n/pricesInJPY\ncontact\ndonate
+          You can try the following:\n/prices\n/crypto\n/rates\n/metal\n/pricesInEUR\n/pricesInCAD\n/pricesInCNY\n/pricesInJPY\n/contact\n/donate
         `)
         .catch((error) => {
           logger.error(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, code: ${error.code}, error: ${error.response.body} date: ${moment.unix(msg.date)}`);
@@ -221,7 +221,7 @@ module.exports = function() {
         break;
       case '/donate':
         try {
-          let result = `If you would like to donate to server costs and to keeping me online,\nplease forward your generosity to\nBTC: 31o28qQFqKFbgRwGewTaBzzFuYjKt62Rxz\nETH: 0x5392aa447103d8e83A1Ca268a217911B7BD50841`
+          let result = `please donate to server costs and to keeping me online...\nBTC: 31o28qQFqKFbgRwGewTaBzzFuYjKt62Rxz\nETH: 0x5392aa447103d8e83A1Ca268a217911B7BD50841`
           bot.sendMessage(chatId, result)
           .catch((error) => {
             logger.error(`user: ${msg.from.username}, isBot: ${msg.from.is_bot}, code: ${error.code}, error: ${error.response.body} date: ${moment.unix(msg.date)}`);
