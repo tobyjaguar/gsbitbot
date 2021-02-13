@@ -260,7 +260,7 @@ module.exports = function() {
   }); // end bot message
 
   bot.on('polling_error', async (error) => {
-    logger.error(`polling error: ${error}, code: ${error.code}, date: ${moment.unix(msg.date)}`);
+    logger.error(`polling error: ${error}, code: ${error.code}, date: ${moment()}`);
     if (error.code === 'EFATAL') {
       console.log('we are fatal...');
       await bot.stopPolling();
@@ -269,7 +269,7 @@ module.exports = function() {
   }); //end polling error
 
   bot.on('webhook_error', (error) => {
-    logger.error(`webhook error: ${error}, code: ${error.code}, date: ${moment.unix(msg.date)}`);
+    logger.error(`webhook error: ${error}, code: ${error.code}, date: ${moment()}`);
 });
 }
 
